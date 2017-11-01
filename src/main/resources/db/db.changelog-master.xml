@@ -3,4 +3,12 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <include file="db/changelog/changelog.xml"/>
+    <changeSet author="vita" id="1">
+        <sql>
+            UPDATE DATABASECHANGELOGLOCK
+            SET locked=0, lockgranted=null, lockedby=null
+            WHERE id=1
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
