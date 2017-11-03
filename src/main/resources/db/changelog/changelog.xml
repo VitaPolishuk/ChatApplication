@@ -8,4 +8,23 @@
                  splitStatements="true"/>
     </changeSet>
 
+    <changeSet author="vita" id="delete">
+        <sqlFile path="deleteTables.sql" relativeToChangelogFile="true" endDelimiter="\n/\s*\n|\n/\s*$"
+                 splitStatements="true"/>
+    </changeSet>
+
+    <changeSet author="vita" id="createNew">
+        <sqlFile path="createNewTables.sql" relativeToChangelogFile="true" endDelimiter="\n/\s*\n|\n/\s*$"
+                 splitStatements="true"/>
+    </changeSet>
+
+    <changeSet author="vita" id="addNewColumn">
+        <sqlFile path="addNewColumn.sql" relativeToChangelogFile="true" endDelimiter="\n/\s*\n|\n/\s*$"
+                 splitStatements="true"/>
+    </changeSet>
+
+    <changeSet author="vita" id="alterTypeColumn">
+        <sqlFile path="alterTypeColumn.sql" relativeToChangelogFile="true" endDelimiter="\n/\s*\n|\n/\s*$"
+                 splitStatements="true"/>
+    </changeSet>
 </databaseChangeLog>

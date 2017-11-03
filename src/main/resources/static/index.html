@@ -3,14 +3,20 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <link rel="stylesheet" href="css/style.css">
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="js/indexJS.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
 </head>
 
 <body>
+<div id="regAndAuthen">
 <form id="login" method="POST">
     <h1>Добро пожаловать в чат!</h1>
+
     <fieldset id="inputs">
         <input id="username" name="username" type="text" placeholder="Логин" autocomplete="off" autofocus required>
         <input id="password" name="password" type="password" placeholder="Пароль" autocomplete="off" required>
@@ -21,5 +27,30 @@
         <input type="button" id="regButton" value="ЗАРЕГИСТРИРОВАТЬСЯ" onclick=registration()>
     </fieldset>
 </form>
+</div>
+<div id="chat">
+    <h2 align = 'center' > Чат</h2>
+    <span id="autorize"> Вы авторизовались как: </span> <span id="name"> </span>
+    <br>
+    <span>Введите сообщение:</span><br>
+    <textarea id="txtMessage"></textarea>
+    <br>
+    <button id="btnSend" onclick="sendMessage()">Отправить</button>
+    <br>
+    <input type="hidden" name="hidden" id="hidden">
+    <div class="row">
+        <div class="col-md-12">
+            <table id="conversation" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Переписка</th>
+                </tr>
+                </thead>
+                <tbody id="messages">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>
