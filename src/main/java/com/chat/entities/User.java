@@ -14,4 +14,5 @@ import java.io.Serializable;
 public class User extends DefaultEntity {
     private String login;
     private String password;
+    private String token;
 }

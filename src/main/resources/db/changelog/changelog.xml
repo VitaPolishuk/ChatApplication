@@ -27,4 +27,9 @@
         <sqlFile path="alterTypeColumn.sql" relativeToChangelogFile="true" endDelimiter="\n/\s*\n|\n/\s*$"
                  splitStatements="true"/>
     </changeSet>
+
+    <changeSet author="vita" id="addNewColumnUsers">
+        <sqlFile path="addNewColumnUser.sql" relativeToChangelogFile="true" endDelimiter="\n/\s*\n|\n/\s*$"
+                 splitStatements="true"/>
+    </changeSet>
 </databaseChangeLog>

@@ -1,10 +1,10 @@
 var stompClient = null;
-var login = "";
 
 function registration() {
 
     var login = document.getElementById("username");
     var password = document.getElementById("password");
+    localStorage.setItem('userName', login.value);
 
     if (login.value == "" || password.value == "") {
         alert("Поля не могут быть пустыми!")
@@ -16,12 +16,10 @@ function registration() {
         }
         $.ajax({
             type: "POST",
-            url: "/registration",
+            url: "/token",
             data: JSON.stringify(dataJson),
-            dataType: 'json',
             async: false,
             headers: {
-                'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             success: function (data) {
@@ -29,7 +27,12 @@ function registration() {
                     alert("Регистрация прошла успешно!");
                     document.getElementById("regAndAuthen").style.display = 'none';
                     document.getElementById("chat").style.display = 'block';
-                    document.getElementById("name").innerHTML = data.login;
+
+                    var name = localStorage.getItem('userName');
+
+                    document.getElementById("name").innerHTML = name;
+                    localStorage.setItem('token'+name, data);
+                    document.getElementById("txtMessage").value = "";
                 }
                 else {
                     alert("Такой логин уже существует");
@@ -46,47 +49,27 @@ function registration() {
 }
 
 function authentication() {
-
-    var login = document.getElementById("username");
-    var password = document.getElementById("password");
-
-    if (login.value == "" || password.value == "") {
-        alert("Поля не могут быть пустыми!")
-    }
-    else {
-        var dataJson = {
-            login: login.value,
-            password: password.value
-        };
+       var nameAuth = document.getElementById("username").value;
         $.ajax({
             type: "POST",
             url: "/authentication",
-            data: JSON.stringify(dataJson),
-            dataType: 'json',
             async: false,
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Authorisation': 'Token '+localStorage.getItem('token'+nameAuth)
             },
             success: function (data) {
                 if (data != "") {
                     document.getElementById("regAndAuthen").style.display = 'none';
                     document.getElementById("chat").style.display = 'block';
-                    document.getElementById("name").innerHTML = data.login;
-                    login = data;
-                }
-                else {
-                    alert("Неверный логин или пароль!");
-                    document.getElementById("password").value = "";
-                    document.getElementById("username").value = ""
+                    document.getElementById("name").innerHTML = nameAuth;
                 }
             },
             error: function () {
-                alert("error");
+                alert("Неверный логин или пароль!");
+                document.getElementById("password").value = "";
+                document.getElementById("username").value = ""
             }
-
         })
-    }
 }
 
 function setConnected(connected) {
@@ -113,36 +96,16 @@ function connect() {
     });
 }
 
-function disconnect() {
-    if (stompClient !== null) {
-        stompClient.disconnect();
-    }
-    setConnected(false);
-    console.log("Disconnected");
-}
-
 function sendMessage() {
     stompClient.send("/chatMessage", {}, JSON.stringify({'login': document.getElementById("name").innerHTML, 'message': $("#txtMessage").val()}));
+    document.getElementById("txtMessage").value = "";
 }
 
 function showGreeting(message) {
     $("#messages").append("<tr><td>" + "[ " + message.date + "]" + "</td></tr>");
     $("#messages").append("<tr><td>" + message.user.login +" : "+ message.message+"</td></tr>");
-
 }
 
 $(function () {
     connect();
-    $("form").on('submit', function (e) {
-        e.preventDefault();
-    });
-    $("#connect").click(function () {
-        connect()
-    });
-    $("#disconnect").click(function () {
-        disconnect();
-    });
-    $("#send").click(function () {
-        sendMessage();
-    });
 });

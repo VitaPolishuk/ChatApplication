@@ -3,6 +3,7 @@ package com.chat.services;
 
 import com.chat.dao.UserRepository;
 import com.chat.entities.User;
+import com.chat.security.JwtGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,26 +15,27 @@ import java.util.List;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private JwtGenerator jwtGenerator;
+
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, JwtGenerator jwtGenerator) {
         this.userRepository = userRepository;
+        this.jwtGenerator = jwtGenerator;
     }
 
-    public User findUserByLoginAndPassword(String login, String password) {
-        return userRepository.findByLoginAndPassword(login, password);
-    }
+    public String saveUser(User user) {
 
-    public User findByLogin(String login) {
-        return userRepository.findByLogin(login);
-    }
-
-    public User saveUser(User user) {
         User instance = userRepository.findByLogin(user.getLogin());
         if (instance != null) {
-            return instance;
+            return "";
         }
-        return userRepository.save(user);
+        else{
+            String token = jwtGenerator.generate(user);
+            user.setToken(token);
+            userRepository.save(user);
+            return token;
+        }
     }
 
 }
